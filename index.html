@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DanceStep - Aprenda a Dançar</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <div class="overlay" id="overlay"></div>
+
+    <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="sidebar" id="sidebar">
+        <h2>Comandos e Funcionalidades do App:</h2>
+
+        <div class="feature">
+            <div class="feature-icon"></div>
+            <h3>Testar Posições:</h3>
+            <p>O usuário pode testar e ajustar diferentes posições com os bonecos disponíveis no app.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon"></div>
+            <h3>Gravar Passos:</h3>
+            <p>É possível gravar uma sequência de passos de dança. O aplicativo reconhecerá e reproduzirá esses passos
+                automaticamente no boneco escolhido.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon"></div>
+            <h3>Sugestões de Passos:</h3>
+            <p>O app oferece sugestões de passos de dança, que o usuário pode experimentar ou combinar como preferir.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon"></div>
+            <h3>Testar Músicas e Ritmos:</h3>
+            <p>O usuário pode testar diversas músicas com diferentes ritmos e aplicar vários estilos de passos nos
+                bonecos para ver como eles se adaptam.</p>
+        </div>
+
+        <!-- Adicionado do código secundário -->
+        <div class="feature" style="border-left-color: #4CAF50; cursor: pointer;" onclick="openStage()">
+            <div class="feature-icon" style="background: #4CAF50;">🎭</div>
+            <h3>Palco de Coreografia:</h3>
+            <p>Crie suas próprias coreografias! Arraste os bonecos para o palco e posicione-os como desejar para montar
+                formações e sequências de dança.</p>
+        </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <div class="header">
+            <h1>DanceStep</h1>
+            <p>Aprenda a dançar com nossas coreografias animadas!</p>
+        </div>
+
+        <!-- Stage Modal - Adicionado do código secundário -->
+        <div class="stage-modal" id="stageModal">
+            <div class="stage-header">
+                <h2>🎭 Palco de Coreografia</h2>
+                <button class="close-stage" onclick="closeStage()">×</button>
+            </div>
+
+            <div class="dancers-palette">
+                <div class="palette-label">Arraste os dançarinos para o palco:</div>
+                <div class="dancer-item" draggable="true" ondragstart="dragStart(event)" data-color="#FF1493">
+                    <svg viewBox="0 0 50 70" style="width: 100%; height: 100%;">
+                        <circle cx="25" cy="10" r="8" fill="#FF1493" />
+                        <line x1="25" y1="18" x2="25" y2="45" stroke="#FF1493" stroke-width="3" />
+                        <line x1="25" y1="25" x2="15" y2="35" stroke="#FF1493" stroke-width="3" />
+                        <line x1="25" y1="25" x2="35" y2="35" stroke="#FF1493" stroke-width="3" />
+                        <line x1="25" y1="45" x2="15" y2="65" stroke="#FF1493" stroke-width="3" />
+                        <line x1="25" y1="45" x2="35" y2="65" stroke="#FF1493" stroke-width="3" />
+                    </svg>
+                </div>
+                <div class="dancer-item" draggable="true" ondragstart="dragStart(event)" data-color="#4169E1">
+                    <svg viewBox="0 0 50 70" style="width: 100%; height: 100%;">
+                        <circle cx="25" cy="10" r="8" fill="#4169E1" />
+                        <line x1="25" y1="18" x2="25" y2="45" stroke="#4169E1" stroke-width="3" />
+                        <line x1="25" y1="25" x2="15" y2="35" stroke="#4169E1" stroke-width="3" />
+                        <line x1="25" y1="25" x2="35" y2="35" stroke="#4169E1" stroke-width="3" />
+                        <line x1="25" y1="45" x2="15" y2="65" stroke="#4169E1" stroke-width="3" />
+                        <line x1="25" y1="45" x2="35" y2="65" stroke="#4169E1" stroke-width="3" />
+                    </svg>
+                </div>
+                <div class="dancer-item" draggable="true" ondragstart="dragStart(event)" data-color="#32CD32">
+                    <svg viewBox="0 0 50 70" style="width: 100%; height: 100%;">
+                        <circle cx="25" cy="10" r="8" fill="#32CD32" />
+                        <line x1="25" y1="18" x2="25" y2="45" stroke="#32CD32" stroke-width="3" />
+                        <line x1="25" y1="25" x2="15" y2="35" stroke="#32CD32" stroke-width="3" />
+                        <line x1="25" y1="25" x2="35" y2="35" stroke="#32CD32" stroke-width="3" />
+                        <line x1="25" y1="45" x2="15" y2="65" stroke="#32CD32" stroke-width="3" />
+                        <line x1="25" y1="45" x2="35" y2="65" stroke="#32CD32" stroke-width="3" />
+                    </svg>
+                </div>
+                <div class="dancer-item" draggable="true" ondragstart="dragStart(event)" data-color="#FFD700">
+                    <svg viewBox="0 0 50 70" style="width: 100%; height: 100%;">
+                        <circle cx="25" cy="10" r="8" fill="#FFD700" />
+                        <line x1="25" y1="18" x2="25" y2="45" stroke="#FFD700" stroke-width="3" />
+                        <line x1="25" y1="25" x2="15" y2="35" stroke="#FFD700" stroke-width="3" />
+                        <line x1="25" y1="25" x2="35" y2="35" stroke="#FFD700" stroke-width="3" />
+                        <line x1="25" y1="45" x2="15" y2="65" stroke="#FFD700" stroke-width="3" />
+                        <line x1="25" y1="45" x2="35" y2="65" stroke="#FFD700" stroke-width="3" />
+                    </svg>
+                </div>
+                <div class="dancer-item" draggable="true" ondragstart="dragStart(event)" data-color="#FF6347">
+                    <svg viewBox="0 0 50 70" style="width: 100%; height: 100%;">
+                        <circle cx="25" cy="10" r="8" fill="#FF6347" />
+                        <line x1="25" y1="18" x2="25" y2="45" stroke="#FF6347" stroke-width="3" />
+                        <line x1="25" y1="25" x2="15" y2="35" stroke="#FF6347" stroke-width="3" />
+                        <line x1="25" y1="25" x2="35" y2="35" stroke="#FF6347" stroke-width="3" />
+                        <line x1="25" y1="45" x2="15" y2="65" stroke="#FF6347" stroke-width="3" />
+                        <line x1="25" y1="45" x2="35" y2="65" stroke="#FF6347" stroke-width="3" />
+                    </svg>
+                </div>
+                <div class="dancer-item" draggable="true" ondragstart="dragStart(event)" data-color="#9370DB">
+                    <svg viewBox="0 0 50 70" style="width: 100%; height: 100%;">
+                        <circle cx="25" cy="10" r="8" fill="#9370DB" />
+                        <line x1="25" y1="18" x2="25" y2="45" stroke="#9370DB" stroke-width="3" />
+                        <line x1="25" y1="25" x2="15" y2="35" stroke="#9370DB" stroke-width="3" />
+                        <line x1="25" y1="25" x2="35" y2="35" stroke="#9370DB" stroke-width="3" />
+                        <line x1="25" y1="45" x2="15" y2="65" stroke="#9370DB" stroke-width="3" />
+                        <line x1="25" y1="45" x2="35" y2="65" stroke="#9370DB" stroke-width="3" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="stage-container" id="stageContainer" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="stage-curtain"></div>
+                <div class="stage-spotlight"></div>
+                <div class="stage-floor"></div>
+            </div>
+
+            <div class="stage-controls">
+                <button class="stage-btn" onclick="saveCoreography()">💾 Salvar Coreografia</button>
+                <button class="stage-btn secondary" onclick="clearStage()">🗑️ Limpar Palco</button>
+                <button class="stage-btn" onclick="animateDancers()">▶️ Animar Dançarinos</button>
+            </div>
+        </div>
+
+        <div class="dance-container">
+            <div class="step-suggestions">
+                <div>
+                    <h2 class="section-title">FUNDAMENTOS PARA QUALQUER ESTILO DE DANÇA</h2>
+
+                    <div class="fundamentals-intro">
+                        <p>Estes são os elementos essenciais que formam a base de qualquer estilo de dança. Domine esses
+                            fundamentos e você estará preparado para aprender qualquer ritmo!</p>
+                    </div>
+
+                    <!-- Área dos bonequinhos -->
+                    <div class="dance-figure-container">
+                        <div class="dance-figure" id="danceFigure">
+                            <div class="head"></div>
+                            <div class="body"></div>
+                            <div class="arm left"></div>
+                            <div class="arm right"></div>
+                            <div class="leg left"></div>
+                            <div class="leg right"></div>
+                        </div>
+                    </div>
+
+                    <div class="dance-figure-controls">
+                        <button class="figure-btn active" onclick="changePose('neutral')">Posição Neutra</button>
+                        <button class="figure-btn" onclick="changePose('rhythm')">Percepção Rítmica</button>
+                        <button class="figure-btn" onclick="changePose('weight')">Controle de Peso</button>
+                        <button class="figure-btn" onclick="changePose('posture')">Postura</button>
+                    </div>
+
+                    <div class="steps-grid">
+                        <div class="step-card active" onclick="selectStep(1)">
+                            <div class="step-number">1</div>
+                            <div class="step-sprite">
+                                <div class="step-icon">🎵</div>
+                            </div>
+                            <div class="step-title">Percepção Rítmica</div>
+                            <div class="step-description">Identificar e seguir o compasso da música</div>
+                        </div>
+
+                        <div class="step-card" onclick="selectStep(2)">
+                            <div class="step-number">2</div>
+                            <div class="step-sprite">
+                                <div class="step-icon">⚖️</div>
+                            </div>
+                            <div class="step-title">Controle de Peso</div>
+                            <div class="step-description">Transferência de peso entre os pés</div>
+                        </div>
+
+                        <div class="step-card" onclick="selectStep(3)">
+                            <div class="step-number">3</div>
+                            <div class="step-sprite">
+                                <div class="step-icon">🦵</div>
+                            </div>
+                            <div class="step-title">Flexão de Joelhos</div>
+                            <div class="step-description">Manter joelhos levemente flexionados</div>
+                        </div>
+
+                        <div class="step-card" onclick="selectStep(4)">
+                            <div class="step-number">4</div>
+                            <div class="step-sprite">
+                                <div class="step-icon">🧍</div>
+                            </div>
+                            <div class="step-title">Postura Corporal</div>
+                            <div class="step-description">Alinhamento correto da coluna</div>
+                        </div>
+
+                        <div class="step-card" onclick="selectStep(5)">
+                            <div class="step-number">5</div>
+                            <div class="step-sprite">
+                                <div class="step-icon">👀</div>
+                            </div>
+                            <div class="step-title">Consciência Espacial</div>
+                            <div class="step-description">Noção do espaço ao redor</div>
+                        </div>
+
+                        <div class="step-card" onclick="selectStep(6)">
+                            <div class="step-number">6</div>
+                            <div class="step-sprite">
+                                <div class="step-icon">🔄</div>
+                            </div>
+                            <div class="step-title">Coordenação Motora</div>
+                            <div class="step-description">Sincronização de movimentos</div>
+                        </div>
+                    </div>
+
+                    <div class="fundamentals-tips">
+                        <h3>Dicas Essenciais para Iniciantes:</h3>
+                        <ul>
+                            <li><strong>Respire naturalmente:</strong> Não prenda a respiração durante os movimentos
+                            </li>
+                            <li><strong>Comece devagar:</strong> Domine o básico antes de aumentar a velocidade</li>
+                            <li><strong>Use um espelho:</strong> Observe sua postura e corrija erros</li>
+                            <li><strong>Pratique regularmente:</strong> A consistência é mais importante que a
+                                intensidade</li>
+                            <li><strong>Ouça a música:</strong> Sinta o ritmo antes de tentar acompanhar</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-button"
+                        style="grid-column: span 3; background: linear-gradient(45deg, #ff6b35, #f093fb); color: white; font-weight: bold; padding: 20px; border-radius: 15px; cursor: pointer;"
+                        onclick="startSequence()">
+                        <div style="font-size: 1.2em;">🎯 Praticar Sequência de Fundamentos</div>
+                        <div style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">Exercite todos os elementos
+                            básicos em sequência</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="section-title">EXPERIMENTE DIFERENTES MÚSICAS</h2>
+
+                    <div class="choreography-section">
+                        <iframe class="choreography-video"
+                            src="https://www.youtube.com/embed/ZcdAc2eP5ic?si=BkI39mNIyS7jLgw_"
+                            title="YouTube video player - Samba no Pé" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; 
+                        gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen></iframe>
+
+                        <div class="choreography-tips">
+                            <h3>Dicas para esta coreografia:</h3>
+                            <ul>
+                                <li>Mantenha os joelhos levemente flexionados para facilitar o movimento dos quadris
+                                </li>
+                                <li>O gingado do samba vem da alternância de peso entre os pés</li>
+                                <li>Mantenha os braços soltos para acompanhar o balanço do corpo</li>
+                                <li>Pratique o passo básico até dominar o ritmo antes de adicionar variações</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="controls">
+                        <button class="control-btn" onclick="previousTrack()">⏮</button>
+                        <button class="control-btn" onclick="playPause()" id="playBtn">▶</button>
+                        <button class="control-btn" onclick="nextTrack()">⏭</button>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+
+                    <div class="genre-buttons">
+                        <div class="genre-btn active" onclick="selectGenre('samba')">Samba</div>
+                        <div class="genre-btn" onclick="selectGenre('forro')">Forró</div>
+                        <div class="genre-btn" onclick="selectGenre('pagode')">Pagode</div>
+                        <div class="genre-btn" onclick="selectGenre('funk')">Funk</div>
+                        <div class="genre-btn" onclick="selectGenre('street')">Street Dance</div>
+                        <div class="genre-btn" onclick="selectGenre('contemporanea')">Contemporânea</div>
+                        <div class="genre-btn" onclick="selectGenre('axe')">Axé</div>
+                        <div class="genre-btn" onclick="selectGenre('dance')">Dance</div>
+                    </div>
+
+                    <div class="current-song">
+                        <div class="song-title" id="songTitle">Samba no Pé - Coreografia</div>
+                        <div class="song-artist" id="songArtist">FitDance/Cia de Dança</div>
+                    </div>
+
+                    <button class="start-session-btn" onclick="startSession()">
+                        Iniciar Prática
+                    </button>
+                </div>
+            </div>
+
+            <div class="instruction-text" id="instructionText">
+                Selecione um fundamento e uma música para começar a aprender! A coreografia mostrará como aplicar cada
+                elemento.
+            </div>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
