@@ -25,24 +25,35 @@
             overlay.classList.remove('active');
         });
 
-        // Stage Functions - Adicionado do código secundário
+        // Stage Functions - CÓDIGO SECUNDÁRIO APLICADO COM CORREÇÕES PARA MOBILE
         function openStage() {
             document.getElementById('stageModal').classList.add('active');
             overlay.classList.add('active');
             sidebar.classList.remove('open');
             mainContent.classList.remove('shifted');
+
+            // Previne scroll do body quando o palco está aberto
+            document.body.style.overflow = 'hidden';
         }
 
         function closeStage() {
             document.getElementById('stageModal').classList.remove('active');
             overlay.classList.remove('active');
+
+            // Restaura scroll do body
+            document.body.style.overflow = '';
         }
 
-        // Drag and Drop Functions - Adicionado do código secundário
+        // Drag and Drop Functions - CÓDIGO SECUNDÁRIO COM CORREÇÕES PARA MOBILE
         function dragStart(event) {
             const color = event.target.closest('.dancer-item').dataset.color;
             event.dataTransfer.setData('color', color);
             event.dataTransfer.effectAllowed = 'copy';
+            
+            // Para mobile - armazena dados para touch
+            if (event.type === 'touchstart') {
+                event.currentTarget.setAttribute('data-color', color);
+            }
         }
 
         function allowDrop(event) {
@@ -55,10 +66,22 @@
             const color = event.dataTransfer.getData('color');
             const stageContainer = document.getElementById('stageContainer');
             const rect = stageContainer.getBoundingClientRect();
-
-            const x = event.clientX - rect.left - 25;
-            const y = event.clientY - rect.top - 35;
-
+            
+            // Para ambos desktop e mobile
+            let clientX, clientY;
+            
+            if (event.type === 'touchend') {
+                const touch = event.changedTouches[0];
+                clientX = touch.clientX;
+                clientY = touch.clientY;
+            } else {
+                clientX = event.clientX;
+                clientY = event.clientY;
+            }
+            
+            const x = clientX - rect.left - 25;
+            const y = clientY - rect.top - 35;
+            
             createDancerOnStage(x, y, color);
         }
 
@@ -68,52 +91,201 @@
             dancer.id = 'dancer-' + dancerIdCounter++;
             dancer.style.left = x + 'px';
             dancer.style.top = y + 'px';
-
-            dancer.innerHTML = `
-        <div class="dancer-delete" onclick="removeDancer('${dancer.id}')">×</div>
-        <svg viewBox="0 0 50 70" style="width: 100%; height: 100%;">
-            <circle cx="25" cy="10" r="8" fill="${color}"/>
-            <line x1="25" y1="18" x2="25" y2="45" stroke="${color}" stroke-width="3"/>
-            <line x1="25" y1="25" x2="15" y2="35" stroke="${color}" stroke-width="3"/>
-            <line x1="25" y1="25" x2="35" y2="35" stroke="${color}" stroke-width="3"/>
-            <line x1="25" y1="45" x2="15" y2="65" stroke="${color}" stroke-width="3"/>
-            <line x1="25" y1="45" x2="35" y2="65" stroke="${color}" stroke-width="3"/>
-        </svg>
-    `;
-
+            
+            // Create delete button
+            const deleteBtn = document.createElement('div');
+            deleteBtn.className = 'dancer-delete';
+            deleteBtn.innerHTML = '×';
+            deleteBtn.onclick = function() {
+                removeDancer(dancer.id);
+            };
+            
+            // Create SVG element properly
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('viewBox', '0 0 50 70');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            svg.style.display = 'block';
+            
+            // Create circle (head)
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', '25');
+            circle.setAttribute('cy', '10');
+            circle.setAttribute('r', '8');
+            circle.setAttribute('fill', color);
+            
+            // Create body line
+            const bodyLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            bodyLine.setAttribute('x1', '25');
+            bodyLine.setAttribute('y1', '18');
+            bodyLine.setAttribute('x2', '25');
+            bodyLine.setAttribute('y2', '45');
+            bodyLine.setAttribute('stroke', color);
+            bodyLine.setAttribute('stroke-width', '3');
+            bodyLine.setAttribute('stroke-linecap', 'round');
+            
+            // Create left arm
+            const leftArm = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            leftArm.setAttribute('x1', '25');
+            leftArm.setAttribute('y1', '25');
+            leftArm.setAttribute('x2', '15');
+            leftArm.setAttribute('y2', '35');
+            leftArm.setAttribute('stroke', color);
+            leftArm.setAttribute('stroke-width', '3');
+            leftArm.setAttribute('stroke-linecap', 'round');
+            
+            // Create right arm
+            const rightArm = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            rightArm.setAttribute('x1', '25');
+            rightArm.setAttribute('y1', '25');
+            rightArm.setAttribute('x2', '35');
+            rightArm.setAttribute('y2', '35');
+            rightArm.setAttribute('stroke', color);
+            rightArm.setAttribute('stroke-width', '3');
+            rightArm.setAttribute('stroke-linecap', 'round');
+            
+            // Create left leg
+            const leftLeg = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            leftLeg.setAttribute('x1', '25');
+            leftLeg.setAttribute('y1', '45');
+            leftLeg.setAttribute('x2', '15');
+            leftLeg.setAttribute('y2', '65');
+            leftLeg.setAttribute('stroke', color);
+            leftLeg.setAttribute('stroke-width', '3');
+            leftLeg.setAttribute('stroke-linecap', 'round');
+            
+            // Create right leg
+            const rightLeg = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            rightLeg.setAttribute('x1', '25');
+            rightLeg.setAttribute('y1', '45');
+            rightLeg.setAttribute('x2', '35');
+            rightLeg.setAttribute('y2', '65');
+            rightLeg.setAttribute('stroke', color);
+            rightLeg.setAttribute('stroke-width', '3');
+            rightLeg.setAttribute('stroke-linecap', 'round');
+            
+            // Append all elements to SVG
+            svg.appendChild(circle);
+            svg.appendChild(bodyLine);
+            svg.appendChild(leftArm);
+            svg.appendChild(rightArm);
+            svg.appendChild(leftLeg);
+            svg.appendChild(rightLeg);
+            
+            // Append to dancer container
+            dancer.appendChild(deleteBtn);
+            dancer.appendChild(svg);
+            
+            // Make dancer draggable on stage - PARA DESKTOP
             dancer.draggable = true;
-            dancer.addEventListener('dragstart', function (e) {
+            dancer.addEventListener('dragstart', function(e) {
                 e.dataTransfer.effectAllowed = 'move';
                 e.dataTransfer.setData('dancerId', dancer.id);
                 dancer.classList.add('dragging');
             });
-
-            dancer.addEventListener('dragend', function () {
+            
+            dancer.addEventListener('dragend', function() {
                 dancer.classList.remove('dragging');
             });
-
+            
+            // SUPPORT PARA MOBILE - TOUCH EVENTS
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+            
+            dancer.addEventListener('touchstart', function(e) {
+                isDragging = true;
+                const touch = e.touches[0];
+                startX = touch.clientX;
+                startY = touch.clientY;
+                initialX = parseInt(dancer.style.left) || 0;
+                initialY = parseInt(dancer.style.top) || 0;
+                dancer.classList.add('dragging');
+                e.preventDefault();
+            }, { passive: false });
+            
+            dancer.addEventListener('touchmove', function(e) {
+                if (!isDragging) return;
+                const touch = e.touches[0];
+                const deltaX = touch.clientX - startX;
+                const deltaY = touch.clientY - startY;
+                
+                const stageContainer = document.getElementById('stageContainer');
+                const rect = stageContainer.getBoundingClientRect();
+                
+                let newX = initialX + deltaX;
+                let newY = initialY + deltaY;
+                
+                // Limita ao palco
+                newX = Math.max(0, Math.min(newX, rect.width - 50));
+                newY = Math.max(0, Math.min(newY, rect.height - 70));
+                
+                dancer.style.left = newX + 'px';
+                dancer.style.top = newY + 'px';
+                
+                e.preventDefault();
+            }, { passive: false });
+            
+            dancer.addEventListener('touchend', function() {
+                isDragging = false;
+                dancer.classList.remove('dragging');
+                
+                // Atualiza posição no array
+                const dancerData = stageDancers.find(d => d.id === dancer.id);
+                if (dancerData) {
+                    dancerData.x = parseInt(dancer.style.left);
+                    dancerData.y = parseInt(dancer.style.top);
+                }
+            });
+            
             document.getElementById('stageContainer').appendChild(dancer);
             stageDancers.push({ id: dancer.id, x, y, color });
         }
 
+        // SUPPORT PARA MOBILE - ARRASTAR DA PALETA
+        document.querySelectorAll('.dancer-item').forEach(item => {
+            // Touch events para mobile
+            item.addEventListener('touchstart', function(e) {
+                const color = this.dataset.color;
+                this.setAttribute('data-color', color);
+                e.preventDefault();
+            }, { passive: false });
+            
+            item.addEventListener('touchend', function(e) {
+                const color = this.getAttribute('data-color');
+                if (color) {
+                    const stageContainer = document.getElementById('stageContainer');
+                    const rect = stageContainer.getBoundingClientRect();
+                    const touch = e.changedTouches[0];
+                    
+                    const x = touch.clientX - rect.left - 25;
+                    const y = touch.clientY - rect.top - 35;
+                    
+                    // Verifica se o toque foi dentro do palco
+                    if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                        createDancerOnStage(x, y, color);
+                    }
+                }
+                e.preventDefault();
+            }, { passive: false });
+        });
 
         // Allow repositioning dancers on stage
-        document.getElementById('stageContainer').addEventListener('drop', function (event) {
+        document.getElementById('stageContainer').addEventListener('drop', function(event) {
             event.preventDefault();
             const dancerId = event.dataTransfer.getData('dancerId');
-
+            
             if (dancerId) {
                 const dancer = document.getElementById(dancerId);
                 if (dancer) {
                     const stageContainer = document.getElementById('stageContainer');
                     const rect = stageContainer.getBoundingClientRect();
-
+                    
                     const x = event.clientX - rect.left - 25;
                     const y = event.clientY - rect.top - 35;
-
+                    
                     dancer.style.left = x + 'px';
                     dancer.style.top = y + 'px';
-
+                    
                     // Update position in array
                     const dancerData = stageDancers.find(d => d.id === dancerId);
                     if (dancerData) {
@@ -143,12 +315,12 @@
                 alert('Adicione pelo menos um dançarino ao palco!');
                 return;
             }
-
+            
             const coreography = {
                 dancers: stageDancers,
                 timestamp: new Date().toISOString()
             };
-
+            
             const data = JSON.stringify(coreography, null, 2);
             alert('Coreografia salva com sucesso! Total de dançarinos: ' + stageDancers.length);
             console.log('Coreografia salva:', data);
@@ -156,12 +328,12 @@
 
         function animateDancers() {
             const dancers = document.querySelectorAll('.stage-dancer svg');
-
+            
             if (dancers.length === 0) {
                 alert('Adicione dançarinos ao palco primeiro!');
                 return;
             }
-
+            
             dancers.forEach((svg, index) => {
                 setTimeout(() => {
                     svg.style.animation = 'dance 1s ease-in-out';
@@ -172,57 +344,33 @@
             });
         }
 
-        // Função para mudar a pose do bonequinho
-        function changePose(pose) {
-            const figure = document.getElementById('danceFigure');
+        // Função para mostrar os textos dos fundamentos
+        function showFundamentalText(fundamental) {
             const buttons = document.querySelectorAll('.figure-btn');
+            const texts = document.querySelectorAll('.fundamental-text');
 
             // Remove classes ativas
             buttons.forEach(btn => btn.classList.remove('active'));
-            figure.classList.remove('bounce', 'sway', 'step');
+            texts.forEach(text => text.classList.remove('active'));
 
             // Ativa o botão clicado
             event.target.classList.add('active');
 
-            // Aplica a pose selecionada
-            currentPose = pose;
+            // Mostra o texto correspondente
+            document.getElementById(`text-${fundamental}`).classList.add('active');
 
-            // Remove todas as transformações anteriores
-            figure.querySelectorAll('.arm, .leg').forEach(limb => {
-                limb.style.transform = '';
-            });
+            // Atualiza o passo atual baseado no fundamental
+            const stepMap = {
+                'rhythm': 1,
+                'weight': 2,
+                'knees': 3,
+                'posture': 4,
+                'space': 5,
+                'coordination': 6
+            };
 
-            switch (pose) {
-                case 'neutral':
-                    // Posição neutra - braços e pernas retos
-                    figure.querySelector('.arm.left').style.transform = 'rotate(-30deg)';
-                    figure.querySelector('.arm.right').style.transform = 'rotate(30deg)';
-                    figure.querySelector('.leg.left').style.transform = 'rotate(0deg)';
-                    figure.querySelector('.leg.right').style.transform = 'rotate(0deg)';
-                    break;
-
-                case 'rhythm':
-                    // Percepção rítmica - balanço suave
-                    figure.classList.add('sway');
-                    figure.querySelector('.arm.left').style.transform = 'rotate(-45deg)';
-                    figure.querySelector('.arm.right').style.transform = 'rotate(45deg)';
-                    break;
-
-                case 'weight':
-                    // Controle de peso - transferência de peso
-                    figure.classList.add('step');
-                    figure.querySelector('.leg.left').style.transform = 'rotate(-15deg)';
-                    figure.querySelector('.leg.right').style.transform = 'rotate(15deg)';
-                    break;
-
-                case 'posture':
-                    // Postura - braços mais abertos, pernas firmes
-                    figure.querySelector('.arm.left').style.transform = 'rotate(-60deg)';
-                    figure.querySelector('.arm.right').style.transform = 'rotate(60deg)';
-                    figure.querySelector('.leg.left').style.transform = 'rotate(-5deg)';
-                    figure.querySelector('.leg.right').style.transform = 'rotate(5deg)';
-                    figure.classList.add('bounce');
-                    break;
+            if (stepMap[fundamental]) {
+                selectStep(stepMap[fundamental]);
             }
         }
 
@@ -237,27 +385,30 @@
             // Add active class to selected step
             document.querySelectorAll('.step-card')[step - 1].classList.add('active');
 
-            // Atualiza automaticamente a pose do bonequinho baseada no passo selecionado
-            const poseMap = {
-                1: 'rhythm',    // Percepção Rítmica
-                2: 'weight',    // Controle de Peso
-                3: 'posture',   // Flexão de Joelhos (relacionado à postura)
-                4: 'posture',   // Postura Corporal
-                5: 'neutral',   // Consciência Espacial
-                6: 'rhythm'     // Coordenação Motora
+            // Atualiza automaticamente o texto do fundamental baseado no passo selecionado
+            const textMap = {
+                1: 'rhythm',
+                2: 'weight',
+                3: 'knees',
+                4: 'posture',
+                5: 'space',
+                6: 'coordination'
             };
 
-            changePose(poseMap[step]);
+            if (textMap[step]) {
+                const buttons = document.querySelectorAll('.figure-btn');
+                const texts = document.querySelectorAll('.fundamental-text');
 
-            // Atualiza o botão ativo
-            document.querySelectorAll('.figure-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.textContent.includes(getPoseName(poseMap[step]))) {
-                    btn.classList.add('active');
-                }
-            });
+                // Remove classes ativas
+                buttons.forEach(btn => btn.classList.remove('active'));
+                texts.forEach(text => text.classList.remove('active'));
 
-            // Update instruction
+                // Ativa o botão e texto correspondentes
+                document.querySelector(`.figure-btn:nth-child(${step})`).classList.add('active');
+                document.getElementById(`text-${textMap[step]}`).classList.add('active');
+            }
+
+            // Update instruction (mantenha as instruções originais se quiser)
             const instructions = {
                 1: "Percepção Rítmica: Feche os olhos e tente identificar a batida principal da música. Conte mentalmente: 1, 2, 3, 4...",
                 2: "Controle de Peso: Pratique transferir seu peso suavemente de um pé para o outro, mantendo o equilíbrio.",
@@ -505,4 +656,232 @@
         document.addEventListener('DOMContentLoaded', () => {
             selectGenre('samba');
             selectStep(1); // Select the first step card
+            showFundamentalText('rhythm'); // Show the first fundamental text
         });
+
+        // Quiz Variables
+        let quizAnswers = {};
+        let currentQuizQuestion = 1;
+
+        // Quiz Functions
+        function openQuiz() {
+            document.getElementById('quizModal').classList.add('active');
+            overlay.classList.add('active');
+            sidebar.classList.remove('open');
+            mainContent.classList.remove('shifted');
+            resetQuiz();
+        }
+
+        function closeQuiz() {
+            document.getElementById('quizModal').classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        function resetQuiz() {
+            quizAnswers = {};
+            currentQuizQuestion = 1;
+
+            // Reset all questions
+            document.querySelectorAll('.quiz-question').forEach(q => q.classList.remove('active'));
+            document.querySelector('[data-question="1"]').classList.add('active');
+
+            // Reset progress dots
+            document.querySelectorAll('.progress-dot').forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                if (index === 0) dot.classList.add('active');
+            });
+
+            // Reset all selected options
+            document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+
+            // Show quiz nav, hide result
+            document.getElementById('quizNav').style.display = 'flex';
+            document.getElementById('quizResult').classList.remove('active');
+            document.getElementById('quizQuestions').style.display = 'block';
+
+            updateNavButtons();
+        }
+
+        function selectAnswer(questionNum, answer) {
+            quizAnswers[questionNum] = answer;
+
+            // Update UI
+            const questionDiv = document.querySelector(`[data-question="${questionNum}"]`);
+            questionDiv.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+            event.target.closest('.quiz-option').classList.add('selected');
+
+            // Enable next button
+            updateNavButtons();
+
+            // Auto advance after selection (optional smooth flow)
+            setTimeout(() => {
+                if (questionNum < 6) {
+                    nextQuestion();
+                } else {
+                    showResults();
+                }
+            }, 500);
+        }
+
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.disabled = currentQuizQuestion === 1;
+            nextBtn.disabled = !quizAnswers[currentQuizQuestion];
+
+            if (currentQuizQuestion === 6 && quizAnswers[6]) {
+                nextBtn.textContent = 'Ver Resultado 🎉';
+            } else {
+                nextBtn.textContent = 'Próxima →';
+            }
+        }
+
+        function nextQuestion() {
+            if (!quizAnswers[currentQuizQuestion]) return;
+
+            // Mark current as completed
+            document.querySelectorAll('.progress-dot')[currentQuizQuestion - 1].classList.add('completed');
+            document.querySelectorAll('.progress-dot')[currentQuizQuestion - 1].classList.remove('active');
+
+            if (currentQuizQuestion < 6) {
+                currentQuizQuestion++;
+
+                // Update active question
+                document.querySelectorAll('.quiz-question').forEach(q => q.classList.remove('active'));
+                document.querySelector(`[data-question="${currentQuizQuestion}"]`).classList.add('active');
+
+                // Update progress
+                document.querySelectorAll('.progress-dot')[currentQuizQuestion - 1].classList.add('active');
+
+                updateNavButtons();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuizQuestion > 1) {
+                // Remove completed from current
+                document.querySelectorAll('.progress-dot')[currentQuizQuestion - 1].classList.remove('active', 'completed');
+
+                currentQuizQuestion--;
+
+                // Update active question
+                document.querySelectorAll('.quiz-question').forEach(q => q.classList.remove('active'));
+                document.querySelector(`[data-question="${currentQuizQuestion}"]`).classList.add('active');
+
+                // Update progress
+                document.querySelectorAll('.progress-dot')[currentQuizQuestion - 1].classList.add('active');
+                document.querySelectorAll('.progress-dot')[currentQuizQuestion - 1].classList.remove('completed');
+
+                updateNavButtons();
+            }
+        }
+
+        function showResults() {
+            // Count answers
+            const counts = { a: 0, b: 0, c: 0, d: 0 };
+            Object.values(quizAnswers).forEach(answer => counts[answer]++);
+
+            // Determine result
+            let maxCount = Math.max(counts.a, counts.b, counts.c, counts.d);
+            let result;
+
+            if (counts.a === maxCount) {
+                result = {
+                    icon: '🎵',
+                    title: 'Seu Estilo é SAMBA!',
+                    genre: 'samba',
+                    description: 'Você gosta de tradição, conexão com raízes e celebra a vida de forma coletiva. O samba é a sua essência, cheio de gingado, história e alegria brasileira!'
+                };
+            } else if (counts.b === maxCount) {
+                result = {
+                    icon: '🎶',
+                    title: 'Seu Estilo é PAGODE!',
+                    genre: 'pagode',
+                    description: 'Você busca leveza, descontração e prefere curtir a vida em momentos simples, mas cheios de risadas. O pagode é perfeito para você, com seu clima de bar e amizade!'
+                };
+            } else if (counts.c === maxCount) {
+                result = {
+                    icon: '🌞',
+                    title: 'Seu Estilo é AXÉ!',
+                    genre: 'axe',
+                    description: 'Sua marca é energia, alegria e movimento. Você contagia as pessoas e vive como se estivesse em um eterno carnaval. O axé é pura energia baiana!'
+                };
+            } else {
+                result = {
+                    icon: '🔥',
+                    title: 'Seu Estilo é FUNK!',
+                    genre: 'funk',
+                    description: 'Você é intensidade pura. Gosta de batidas fortes, liberdade de expressão e viver a vida no ritmo da adrenalina. O funk é sua identidade sonora!'
+                };
+            }
+
+            // Display result
+            document.getElementById('resultIcon').textContent = result.icon;
+            document.getElementById('resultTitle').textContent = result.title;
+            document.getElementById('resultDescription').textContent = result.description;
+
+            // Store selected genre
+            window.selectedQuizGenre = result.genre;
+
+            // Hide questions and nav, show result
+            document.getElementById('quizQuestions').style.display = 'none';
+            document.getElementById('quizNav').style.display = 'none';
+            document.getElementById('quizResult').classList.add('active');
+        }
+
+        function restartQuiz() {
+            resetQuiz();
+        }
+
+        function applyGenreAndClose() {
+            if (window.selectedQuizGenre) {
+                // Apply the genre to the main page
+                currentGenre = window.selectedQuizGenre;
+
+                // Update genre button selection
+                document.querySelectorAll('.genre-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+
+                // Find and activate the matching genre button
+                const genreMap = {
+                    'samba': 'samba',
+                    'pagode': 'pagode',
+                    'axe': 'axe',
+                    'funk': 'funk'
+                };
+
+                const targetGenre = genreMap[window.selectedQuizGenre];
+                document.querySelectorAll('.genre-btn').forEach(btn => {
+                    if (btn.textContent.toLowerCase().includes(targetGenre)) {
+                        btn.classList.add('active');
+                    }
+                });
+
+                // Update song info
+                selectGenre(window.selectedQuizGenre);
+
+                // Show success message
+                document.getElementById('instructionText').textContent = `Perfeito! Agora você vai aprender ${currentGenre.toUpperCase()}! Comece escolhendo os passos e divirta-se! 🎉`;
+            }
+
+            closeQuiz();
+        }
+
+        // Update overlay click handler to include quiz modal
+        overlay.addEventListener('click', () => {
+            if (document.getElementById('stageModal').classList.contains('active')) {
+                closeStage();
+            } else if (document.getElementById('quizModal').classList.contains('active')) {
+                closeQuiz();
+            } else {
+                sidebar.classList.remove('open');
+                mainContent.classList.remove('shifted');
+                overlay.classList.remove('active');
+            }
+        });
+
+       
