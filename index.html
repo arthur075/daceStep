@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DanceStep - Aprenda a Dançar</title>
-    <link rel="stylesheet" href="style.css">
-
+   
 </head>
+        <link rel="stylesheet" href="style.css">
 
 <body>
     <div class="overlay" id="overlay"></div>
@@ -55,6 +55,13 @@
             <p>Crie suas próprias coreografias! Arraste os bonecos para o palco e posicione-os como desejar para montar
                 formações e sequências de dança.</p>
         </div>
+
+        <div class="feature" style="border-left-color: #9C27B0; cursor: pointer;" onclick="openQuiz()">
+            <div class="feature-icon" style="background: #9C27B0;">🎵</div>
+            <h3>Descubra Seu Estilo Musical:</h3>
+            <p>Responda perguntas divertidas e descubra qual estilo de dança e música combina perfeitamente com sua
+                personalidade!</p>
+        </div>
     </div>
 
     <div class="main-content" id="mainContent">
@@ -63,7 +70,7 @@
             <p>Aprenda a dançar com nossas coreografias animadas!</p>
         </div>
 
-        <!-- Stage Modal - Adicionado do código secundário -->
+        <!-- Stage Modal - CÓDIGO SECUNDÁRIO APLICADO COM CORREÇÕES PARA MOBILE -->
         <div class="stage-modal" id="stageModal">
             <div class="stage-header">
                 <h2>🎭 Palco de Coreografia</h2>
@@ -147,6 +154,186 @@
             </div>
         </div>
 
+        <!-- Quiz Modal -->
+        <div class="quiz-modal" id="quizModal">
+            <div class="quiz-header">
+                <h2>🎵 Descubra Seu Estilo Musical</h2>
+                <p class="quiz-subtitle">Responda as perguntas e descubra qual ritmo combina com você!</p>
+                <button class="close-quiz" onclick="closeQuiz()">×</button>
+            </div>
+
+            <div class="quiz-progress" id="quizProgress">
+                <div class="progress-dot active"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-dot"></div>
+            </div>
+
+            <div id="quizQuestions">
+                <!-- Question 1 -->
+                <div class="quiz-question active" data-question="1">
+                    <div class="question-number">Pergunta 1 de 6</div>
+                    <div class="question-text">O que a música significa para você?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(1, 'a')">
+                            <span class="option-letter">A</span>
+                            Conexão com as raízes e tradição.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(1, 'b')">
+                            <span class="option-letter">B</span>
+                            União e momentos leves com pessoas queridas.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(1, 'c')">
+                            <span class="option-letter">C</span>
+                            Energia que contagia e me faz dançar.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(1, 'd')">
+                            <span class="option-letter">D</span>
+                            Liberdade de me expressar sem limites.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-question" data-question="2">
+                    <div class="question-number">Pergunta 2 de 6</div>
+                    <div class="question-text">Quando você está em um dia difícil, o que procura na música?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(2, 'a')">
+                            <span class="option-letter">A</span>
+                            Força e alegria para não perder a esperança.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(2, 'b')">
+                            <span class="option-letter">B</span>
+                            Leveza e descontração para esquecer os problemas.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(2, 'c')">
+                            <span class="option-letter">C</span>
+                            Animação e movimento para renovar o ânimo.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(2, 'd')">
+                            <span class="option-letter">D</span>
+                            Intensidade para extravasar e liberar tudo.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="quiz-question" data-question="3">
+                    <div class="question-number">Pergunta 3 de 6</div>
+                    <div class="question-text">Qual cenário você escolheria para ouvir música?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(3, 'a')">
+                            <span class="option-letter">A</span>
+                            Uma roda animada na rua ou no barzinho.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(3, 'b')">
+                            <span class="option-letter">B</span>
+                            Um encontro íntimo com amigos próximos.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(3, 'c')">
+                            <span class="option-letter">C</span>
+                            Um carnaval ou show em multidão.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(3, 'd')">
+                            <span class="option-letter">D</span>
+                            Uma pista lotada com luzes e batidas.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-question" data-question="4">
+                    <div class="question-number">Pergunta 4 de 6</div>
+                    <div class="question-text">Como você expressa seus sentimentos através da música?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(4, 'a')">
+                            <span class="option-letter">A</span>
+                            Cantando junto em coro, no improviso.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(4, 'b')">
+                            <span class="option-letter">B</span>
+                            Sorrindo, brincando e compartilhando.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(4, 'c')">
+                            <span class="option-letter">C</span>
+                            Dançando, vibrando e celebrando.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(4, 'd')">
+                            <span class="option-letter">D</span>
+                            Pulando, gritando e vivendo a intensidade.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="quiz-question" data-question="5">
+                    <div class="question-number">Pergunta 5 de 6</div>
+                    <div class="question-text">O que mais importa para você em uma música?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(5, 'a')">
+                            <span class="option-letter">A</span>
+                            A batida marcante e tradicional.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(5, 'b')">
+                            <span class="option-letter">B</span>
+                            A descontração e proximidade nas letras.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(5, 'c')">
+                            <span class="option-letter">C</span>
+                            A energia que levanta todo mundo.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(5, 'd')">
+                            <span class="option-letter">D</span>
+                            A força da batida e o impacto sonoro.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="quiz-question" data-question="6">
+                    <div class="question-number">Pergunta 6 de 6</div>
+                    <div class="question-text">Se sua vida fosse uma trilha sonora, seria:</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectAnswer(6, 'a')">
+                            <span class="option-letter">A</span>
+                            Um clássico que nunca sai de moda.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(6, 'b')">
+                            <span class="option-letter">B</span>
+                            Uma música leve e divertida.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(6, 'c')">
+                            <span class="option-letter">C</span>
+                            Um hit contagiante de verão.
+                        </div>
+                        <div class="quiz-option" onclick="selectAnswer(6, 'd')">
+                            <span class="option-letter">D</span>
+                            Uma batida intensa que domina a pista.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="quiz-result" id="quizResult">
+                <div class="result-icon" id="resultIcon"></div>
+                <div class="result-title" id="resultTitle"></div>
+                <div class="result-description" id="resultDescription"></div>
+                <div class="result-buttons">
+                    <button class="result-btn" onclick="applyGenreAndClose()">Começar a Dançar!</button>
+                    <button class="result-btn secondary" onclick="restartQuiz()">Refazer Quiz</button>
+                </div>
+            </div>
+
+            <div class="quiz-nav" id="quizNav">
+                <button class="quiz-nav-btn" onclick="previousQuestion()" id="prevBtn" disabled>← Anterior</button>
+                <button class="quiz-nav-btn" onclick="nextQuestion()" id="nextBtn" disabled>Próxima →</button>
+            </div>
+        </div>
+
         <div class="dance-container">
             <div class="step-suggestions">
                 <div>
@@ -157,23 +344,57 @@
                             fundamentos e você estará preparado para aprender qualquer ritmo!</p>
                     </div>
 
-                    <!-- Área dos bonequinhos -->
-                    <div class="dance-figure-container">
-                        <div class="dance-figure" id="danceFigure">
-                            <div class="head"></div>
-                            <div class="body"></div>
-                            <div class="arm left"></div>
-                            <div class="arm right"></div>
-                            <div class="leg left"></div>
-                            <div class="leg right"></div>
+
+                    <!-- Área dos textos explicativos -->
+                    <div class="fundamentals-text-container" id="fundamentalsTextContainer">
+                        <div class="fundamental-text active" id="text-rhythm">
+                            <h3>Percepção Rítmica</h3>
+                            <p>Sinta a música ou o som. Bata o pé ou as palmas seguindo o ritmo. Você precisa ouvir com
+                                atenção e repetir o padrão. Isso vai ajudar seu corpo a entrar no tempo certo.</p>
+                        </div>
+
+                        <div class="fundamental-text" id="text-weight">
+                            <h3>Controle de Peso</h3>
+                            <p>Distribua o peso do seu corpo igualmente entre os pés. Se mover para um lado, transfira o
+                                peso suavemente. Você precisa estar consciente do seu equilíbrio para se mover com
+                                segurança.</p>
+                        </div>
+
+                        <div class="fundamental-text" id="text-knees">
+                            <h3>Flexão de Joelhos</h3>
+                            <p>Afaste um pouco os pés, dobre os joelhos devagar, mantendo as costas retas. Você precisa
+                                flexionar para amortecer impactos e dar mais estabilidade ao movimento.</p>
+                        </div>
+
+                        <div class="fundamental-text" id="text-posture">
+                            <h3>Postura Corporal</h3>
+                            <p>Endireite as costas, abra o peito, relaxe os ombros. Você precisa manter essa postura
+                                para evitar dores e ter mais controle nos movimentos.</p>
+                        </div>
+
+                        <div class="fundamental-text" id="text-space">
+                            <h3>Consciência Espacial</h3>
+                            <p>Olhe ao redor, perceba o espaço, veja onde estão pessoas e objetos. Você precisa usar
+                                essa percepção para se movimentar sem esbarrar e com mais precisão.</p>
+                        </div>
+
+                        <div class="fundamental-text" id="text-coordination">
+                            <h3>Coordenação Motora</h3>
+                            <p>Comece com movimentos simples (braços e pernas juntos) e depois combine mais de um
+                                movimento ao mesmo tempo. Você precisa praticar isso para que seus gestos fiquem mais
+                                harmoniosos.</p>
                         </div>
                     </div>
 
                     <div class="dance-figure-controls">
-                        <button class="figure-btn active" onclick="changePose('neutral')">Posição Neutra</button>
-                        <button class="figure-btn" onclick="changePose('rhythm')">Percepção Rítmica</button>
-                        <button class="figure-btn" onclick="changePose('weight')">Controle de Peso</button>
-                        <button class="figure-btn" onclick="changePose('posture')">Postura</button>
+                        <button class="figure-btn active" onclick="showFundamentalText('rhythm')">Percepção
+                            Rítmica</button>
+                        <button class="figure-btn" onclick="showFundamentalText('weight')">Controle de Peso</button>
+                        <button class="figure-btn" onclick="showFundamentalText('knees')">Flexão de Joelhos</button>
+                        <button class="figure-btn" onclick="showFundamentalText('posture')">Postura Corporal</button>
+                        <button class="figure-btn" onclick="showFundamentalText('space')">Consciência Espacial</button>
+                        <button class="figure-btn" onclick="showFundamentalText('coordination')">Coordenação
+                            Motora</button>
                     </div>
 
                     <div class="steps-grid">
@@ -315,8 +536,7 @@
         </div>
     </div>
 
-
-    <script src="script.js"></script>
+     <script src="script.js"></script>
 </body>
 
 </html>
